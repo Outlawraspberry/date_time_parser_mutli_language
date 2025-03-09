@@ -1,5 +1,5 @@
-mod language;
 mod date_parser;
+mod language;
 mod time_parser;
 
 fn main() {

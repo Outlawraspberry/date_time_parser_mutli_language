@@ -1,4 +1,3 @@
-
 #[derive(PartialEq, Debug)]
 pub enum Weekday {
     Monday,
@@ -7,7 +6,7 @@ pub enum Weekday {
     Thursday,
     Friday,
     Saturday,
-    Sunday
+    Sunday,
 }
 
 #[derive(PartialEq, Debug)]
@@ -23,7 +22,7 @@ pub enum Month {
     September,
     October,
     November,
-    December
+    December,
 }
 
 pub fn num_to_month(num: u32) -> Option<Month> {
@@ -40,7 +39,7 @@ pub fn num_to_month(num: u32) -> Option<Month> {
         10 => Some(Month::October),
         11 => Some(Month::November),
         12 => Some(Month::December),
-        _ => None
+        _ => None,
     }
 }
 

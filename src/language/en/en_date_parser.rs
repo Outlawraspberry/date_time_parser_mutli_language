@@ -6,6 +6,6 @@ pub struct EnDateParser {}
 
 impl DateParser for EnDateParser {
     fn search_date(input: &str) -> Option<NaiveDate> {
-      None  
+        None
     }
 }
