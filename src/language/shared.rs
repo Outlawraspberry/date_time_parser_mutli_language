@@ -1,4 +1,10 @@
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Debug, Clone)]
+pub enum DateFormat {
+    DayMonthYear,
+    MonthDayYear
+}
+
+#[derive(PartialEq, Debug, Clone)]
 pub enum Weekday {
     Monday,
     Tuesday,
@@ -9,7 +15,7 @@ pub enum Weekday {
     Sunday,
 }
 
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Debug, Clone)]
 pub enum Month {
     January,
     February,
@@ -41,6 +47,17 @@ pub fn num_to_month(num: u32) -> Option<Month> {
         12 => Some(Month::December),
         _ => None,
     }
+}
+
+#[derive(Debug, PartialEq, Clone)]
+/// An abstract syntax for parsing dates.
+pub enum DateExpression {
+    InXDays(i32),
+    DayInXWeeks(i8, Weekday), // e.g. next week monday => DayInXWeeks(1, Mon)
+    InXMonths(i32),           // e.g. in 2 months => InXMonths(2)
+    DayInMonth(Month, u32),   // e.g. June 8th => InMonth(Jun, 8)
+    DayInMonthInYear(Month, u32, i32), // e.g. June 8th, 2019 => InYear(Jun, 8, 2019)
+    InMonthInYear(Month, i32),
 }
 
 #[cfg(test)]
