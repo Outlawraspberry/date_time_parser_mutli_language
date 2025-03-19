@@ -1,9 +1,7 @@
 use chrono::Weekday;
-use regex::Regex;
 
 use crate::recognizable::Recognizable;
 
-#[derive(PartialEq, Debug, Clone)]
 pub enum DateFormat {
     DayMonthYear,
     MonthDayYear,
@@ -45,50 +43,13 @@ pub fn num_to_month(num: u32) -> Option<Month> {
 
 /// Parsing a str into a `Weekday` uses the format %W.
 impl Recognizable for Weekday {
-    fn recognize(text: &str) -> Option<Weekday> {
+    fn recognize(text: &str, _date_format: &DateFormat) -> Option<Weekday> {
         text.parse::<Weekday>().ok()
     }
 
     fn describe() -> &'static str {
         "day of week"
     }
-}
-
-/// Parsing a str into a `MonthOfYear` uses english abbreviations and full names.
-impl Recognizable for Month {
-    fn recognize(text: &str) -> Option<Month> {
-        parse_month_of_year_english(text)
-    }
-
-    fn describe() -> &'static str {
-        "month of year"
-    }
-}
-
-/// Parses a `str` into an `Option` containing a `MonthOfYear`.
-fn parse_month_of_year_english(text: &str) -> Option<Month> {
-    let re = Regex::new(r"(?i)(?P<month>jan|january|feb|mar|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)(r?uary|ch|il|e|y|ust|tember|ober|ember|\b)").unwrap();
-
-    if let Some(caps) = re.captures(text) {
-        if let Some(month_match) = caps.name("month") {
-            match month_match.as_str().to_lowercase().as_ref() {
-                "jan" => return Some(Month::January),
-                "feb" => return Some(Month::February),
-                "mar" => return Some(Month::March),
-                "apr" => return Some(Month::April),
-                "may" => return Some(Month::May),
-                "jun" => return Some(Month::June),
-                "jul" => return Some(Month::July),
-                "aug" => return Some(Month::August),
-                "sep" => return Some(Month::September),
-                "oct" => return Some(Month::October),
-                "nov" => return Some(Month::November),
-                "dec" => return Some(Month::December),
-                _ => {}
-            }
-        }
-    }
-    None
 }
 
 #[derive(Debug, PartialEq, Clone)]
