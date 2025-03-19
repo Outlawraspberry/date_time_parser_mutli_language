@@ -37,10 +37,13 @@ Modifications by Outlawraspberry UG (haftungsbeschränkt)
 use chrono::Weekday;
 use regex::Regex;
 
-use crate::{language::shared::DateExpression, recognizable::Recognizable};
+use crate::{
+    language::shared::{DateExpression, DateFormat},
+    recognizable::Recognizable,
+};
 
 /// Parses a `str` into an `Option` containing a `DateExpression::InWeek(i8, Weekday)`
-pub fn parse_date_in_week(text: &str) -> Option<DateExpression> {
+pub fn parse_date_in_week(text: &str, date_format: &DateFormat) -> Option<DateExpression> {
     // sat, this saturday, next saturday, last saturday, this sat,
 
     let re = Regex::new(r"(?i)(?P<prep>next|last|this)\s(?P<day>\w+)").unwrap();
@@ -57,7 +60,7 @@ pub fn parse_date_in_week(text: &str) -> Option<DateExpression> {
             if let Some(day_match) = caps.name("day") {
                 let day_str = day_match.as_str();
 
-                if let Some(day) = Weekday::recognize(day_str) {
+                if let Some(day) = Weekday::recognize(day_str, date_format) {
                     return Some(DateExpression::DayInXWeeks(relative_week, day));
                 }
             }
@@ -69,7 +72,7 @@ pub fn parse_date_in_week(text: &str) -> Option<DateExpression> {
 
 #[cfg(test)]
 mod parse_date_in_week_works_when {
-    use super::{parse_date_in_week, DateExpression};
+    use super::{parse_date_in_week, DateExpression, DateFormat};
     use chrono::Weekday;
 
     #[test]
@@ -82,7 +85,7 @@ mod parse_date_in_week_works_when {
 
     fn assert_day_in_n_weeks(text: &str, day: Weekday, relative_week: i8) {
         assert_eq!(
-            parse_date_in_week(text),
+            parse_date_in_week(text, &DateFormat::DayMonthYear),
             Some(DateExpression::DayInXWeeks(relative_week, day))
         )
     }

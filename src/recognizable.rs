@@ -23,12 +23,20 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+Modifications:
+
+- Add date format
+
+Modified by Outlawraspberry UG (haftungsbeschränkt)
 */
+
+use crate::language::shared::DateFormat;
 
 /// An interface for dealing with parsing unstructured text. Implement this trait for your abstract syntax when parsing.
 pub trait Recognizable: Sized {
     /// Takes unstructed text, and returns an instance of the abstract syntax if a match is found.
-    fn recognize(text: &str) -> Option<Self>;
+    fn recognize(text: &str, date_format: &DateFormat) -> Option<Self>;
 
     /// Returns a string to describe the abstract syntax.
     fn describe() -> &'static str;

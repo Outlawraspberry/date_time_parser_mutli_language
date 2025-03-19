@@ -36,14 +36,13 @@ Modifications by Outlawraspberry UG (haftungsbeschränkt)
 
 use regex::Regex;
 
-use crate::language::shared::{DateExpression, Month};
+use crate::language::shared::{DateExpression, DateFormat, Month};
 use crate::recognizable::Recognizable;
 
 /// Parses a `str` into an `Option` containing a `DateExpr::InMonth(MonthOfYear, u32)`.
-pub fn parse_month_date(text: &str) -> Option<DateExpression> {
+pub fn parse_month_date(text: &str, date_format: &DateFormat) -> Option<DateExpression> {
     //june 1, june 1st
 
-    // TODO: Generalize for having the date before the month, not just after
     let re = Regex::new(r"(?i)(?P<date>\d{1,2})?(th)?\s(?P<month>jan|january|feb|mar|april|may|jun|jul|aug|sep|oct|nov|dec)(r?uary|ch|il|e|y|ust|tember|ober|ember|\b)|(?P<month2>jan|january|feb|mar|april|may|jun|jul|aug|sep|oct|nov|dec)(r?uary|ch|il|e|y|ust|tember|ober|ember|\b)\s(?P<date2>\d{1,2})?(th)?").unwrap();
 
     if let Some(caps) = re.captures(text) {
@@ -51,7 +50,7 @@ pub fn parse_month_date(text: &str) -> Option<DateExpression> {
             if let Some(date_match) = caps.name("date").or(caps.name("date2")) {
                 let date: u32 = date_match.as_str().parse().unwrap();
                 let month = month_match.as_str();
-                if let Some(m) = Month::recognize(month) {
+                if let Some(m) = Month::recognize(month, date_format) {
                     return Some(DateExpression::DayInMonth(m, date));
                 }
             }
@@ -63,7 +62,7 @@ pub fn parse_month_date(text: &str) -> Option<DateExpression> {
 
 #[cfg(test)]
 mod parse_month_date_english_works_when {
-    use super::{parse_month_date, DateExpression, Month};
+    use super::{parse_month_date, DateExpression, DateFormat, Month};
 
     #[test]
     fn absolute_english_date_tests_month_day() {
@@ -84,6 +83,7 @@ mod parse_month_date_english_works_when {
 
         assert_recognize_in_month("15 Jan", Month::January, 15);
         assert_recognize_in_month("5th February", Month::February, 5);
+        assert_recognize_in_month("5th of February", Month::February, 5);
         assert_recognize_in_month("25 May", Month::May, 25);
     }
 
@@ -91,7 +91,7 @@ mod parse_month_date_english_works_when {
         let date_expression = DateExpression::DayInMonth(expected_m, expected_d);
 
         assert_eq!(
-            parse_month_date(text),
+            parse_month_date(text, &DateFormat::DayMonthYear),
             Some(date_expression.clone()),
             "Failed to parse {} to {:?}",
             text,
