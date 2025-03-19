@@ -1,5 +1,5 @@
 [package]
-name = "date-parser"
+name = "date_time_parser_multi_language"
 version = "0.1.0"
 edition = "2021"
 
