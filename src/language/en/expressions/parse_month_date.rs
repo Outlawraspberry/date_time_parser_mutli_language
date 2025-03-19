@@ -43,7 +43,7 @@ use crate::recognizable::Recognizable;
 pub fn parse_month_date(text: &str, date_format: &DateFormat) -> Option<DateExpression> {
     //june 1, june 1st
 
-    let re = Regex::new(r"(?i)(?P<date>\d{1,2})?(th)?\s(?P<month>jan|january|feb|mar|april|may|jun|jul|aug|sep|oct|nov|dec)(r?uary|ch|il|e|y|ust|tember|ober|ember|\b)|(?P<month2>jan|january|feb|mar|april|may|jun|jul|aug|sep|oct|nov|dec)(r?uary|ch|il|e|y|ust|tember|ober|ember|\b)\s(?P<date2>\d{1,2})?(th)?").unwrap();
+    let re = Regex::new(r"(?i)(?P<date>\d{1,2})?(th)?\s*(of\s*)?(?P<month>jan|january|feb|mar|april|may|jun|jul|aug|sep|oct|nov|dec)(r?uary|ch|il|e|y|ust|tember|ober|ember|\b)|(?P<month2>jan|january|feb|mar|april|may|jun|jul|aug|sep|oct|nov|dec)(r?uary|ch|il|e|y|ust|tember|ober|ember|\b)\s*(?P<date2>\d{1,2})?(th)?").unwrap();
 
     if let Some(caps) = re.captures(text) {
         if let Some(month_match) = caps.name("month").or(caps.name("month2")) {
@@ -79,6 +79,8 @@ mod parse_month_date_english_works_when {
     fn absolute_english_date_tests_day_month() {
         assert_recognize_in_month("15 Jun ", Month::June, 15);
         assert_recognize_in_month("5th June ", Month::June, 5);
+        assert_recognize_in_month("5th of June ", Month::June, 5);
+        assert_recognize_in_month("5 of June ", Month::June, 5);
         assert_recognize_in_month("5 June ", Month::June, 5);
 
         assert_recognize_in_month("15 Jan", Month::January, 15);
