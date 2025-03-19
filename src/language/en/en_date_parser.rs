@@ -138,18 +138,9 @@ impl DateParser for EnDateParser {
                     }
                 }
 
-                DateExpression::DayInMonth(m, d) => {
-                    return NaiveDate::from_ymd_opt(now.year(), m as u32, d);
-                }
-
-                DateExpression::DayInMonthInYear(m, d, y) => {
-                    return NaiveDate::from_ymd_opt(y, m as u32, d);
-                }
-
-                DateExpression::InXDays(n) => {
-                    let d = Duration::days(n as i64);
-                    return Some(now.checked_add_signed(d).unwrap());
-                }
+                DateExpression::DayInMonthInYear(month, day, year) => {
+                    return NaiveDate::from_ymd_opt(year, month as u32, day);
+                },
 
                 DateExpression::DayInXWeeks(n, d) => {
                     let mut difference: i32 = (d.num_days_from_sunday() as i32)
