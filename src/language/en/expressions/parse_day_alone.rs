@@ -84,6 +84,12 @@ mod parse_day_alone_works_when {
     }
 
     fn assert_day(input: &str, expected_day: Weekday) {
-        assert_eq!(parse_day_alone(input), Some(DateExpression::DayInXWeeks(0, expected_day)), "expected {} to be {:?}", input, expected_day);
+        assert_eq!(
+            parse_day_alone(input),
+            Some(DateExpression::DayInXWeeks(0, expected_day)),
+            "expected {} to be {:?}",
+            input,
+            expected_day
+        );
     }
 }

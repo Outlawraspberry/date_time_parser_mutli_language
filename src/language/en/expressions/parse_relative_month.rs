@@ -38,7 +38,6 @@ use regex::Regex;
 
 use crate::language::shared::DateExpression;
 
-
 /// Parses a `str` into an `Option` containing a `DateExpr::InNMonths(i32)`
 pub fn parse_relative_month(text: &str) -> Option<DateExpression> {
     // this month, next month, last month

@@ -40,7 +40,6 @@ use regex::Regex;
 
 use crate::language::shared::DateExpression;
 
-
 /// Parses a `str` into an `Option` containing a `DateExpr::InNMonths(i32)`
 pub fn parse_in_n_months(text: &str) -> Option<DateExpression> {
     // in 2 months
