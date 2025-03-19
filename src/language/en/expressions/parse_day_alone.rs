@@ -67,20 +67,20 @@ mod parse_day_alone_works_when {
 
     #[test]
     fn recognices_days() {
-        assert_day("remember me on monday to do stuff", Weekday::Mon);
-        assert_day("remember me on monday to do stuff", Weekday::Mon);
-        assert_day("remember me on tuesday to do stuff", Weekday::Tue);
-        assert_day("remember me on tue to do stuff", Weekday::Tue);
-        assert_day("remember me on wednesday to do stuff", Weekday::Wed);
-        assert_day("remember me on wed to do stuff", Weekday::Wed);
-        assert_day("remember me on thursday to do stuff", Weekday::Thu);
-        assert_day("remember me on thu to do stuff", Weekday::Thu);
-        assert_day("remember me on friday to do stuff", Weekday::Fri);
-        assert_day("remember me on fri to do stuff", Weekday::Fri);
-        assert_day("remember me on saturday to do stuff", Weekday::Sat);
-        assert_day("remember me on sat to do stuff", Weekday::Sat);
-        assert_day("remember me on sunday to do stuff", Weekday::Sun);
-        assert_day("remember me on sun to do stuff", Weekday::Sun);
+        assert_day("remind me on monday to do stuff", Weekday::Mon);
+        assert_day("remind me on monday to do stuff", Weekday::Mon);
+        assert_day("remind me on tuesday to do stuff", Weekday::Tue);
+        assert_day("remind me on tue to do stuff", Weekday::Tue);
+        assert_day("remind me on wednesday to do stuff", Weekday::Wed);
+        assert_day("remind me on wed to do stuff", Weekday::Wed);
+        assert_day("remind me on thursday to do stuff", Weekday::Thu);
+        assert_day("remind me on thu to do stuff", Weekday::Thu);
+        assert_day("remind me on friday to do stuff", Weekday::Fri);
+        assert_day("remind me on fri to do stuff", Weekday::Fri);
+        assert_day("remind me on saturday to do stuff", Weekday::Sat);
+        assert_day("remind me on sat to do stuff", Weekday::Sat);
+        assert_day("remind me on sunday to do stuff", Weekday::Sun);
+        assert_day("remind me on sun to do stuff", Weekday::Sun);
     }
 
     fn assert_day(input: &str, expected_day: Weekday) {

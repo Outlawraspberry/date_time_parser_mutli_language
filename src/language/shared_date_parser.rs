@@ -89,8 +89,8 @@ mod shared_data_parser_works_when {
 
         assert_date_month_year("5.12.2026", Some(test_date.clone()));
         assert_date_month_year("05.12.2026", Some(test_date.clone()));
-        assert_date_month_year("Remember me on 5.12.2026", Some(test_date.clone()));
-        assert_date_month_year("Remember me on 05.12.2026", Some(test_date.clone()));
+        assert_date_month_year("Remind me on 5.12.2026", Some(test_date.clone()));
+        assert_date_month_year("Remind me on 05.12.2026", Some(test_date.clone()));
     }
 
     #[test]
@@ -99,8 +99,8 @@ mod shared_data_parser_works_when {
 
         assert_month_date_year("12.5.2026", Some(test_date.clone()));
         assert_month_date_year("12.05.2026", Some(test_date.clone()));
-        assert_month_date_year("Remember me on 12.5.2026", Some(test_date.clone()));
-        assert_month_date_year("Remember me on 12.05.2026", Some(test_date.clone()));
+        assert_month_date_year("Remind me on 12.5.2026", Some(test_date.clone()));
+        assert_month_date_year("Remind me on 12.05.2026", Some(test_date.clone()));
     }
 
     #[test]
@@ -109,8 +109,8 @@ mod shared_data_parser_works_when {
 
         assert_date_month_year("5.12", Some(test_date.clone()));
         assert_date_month_year("05.12", Some(test_date.clone()));
-        assert_date_month_year("Remember me on 5.12", Some(test_date.clone()));
-        assert_date_month_year("Remember me on 05.12", Some(test_date.clone()));
+        assert_date_month_year("Remind me on 5.12", Some(test_date.clone()));
+        assert_date_month_year("Remind me on 05.12", Some(test_date.clone()));
     }
 
     #[test]
@@ -119,8 +119,8 @@ mod shared_data_parser_works_when {
 
         assert_month_date_year("12.5", Some(test_date.clone()));
         assert_month_date_year("12.05", Some(test_date.clone()));
-        assert_month_date_year("Remember me on 12.5", Some(test_date.clone()));
-        assert_month_date_year("Remember me on 12.05", Some(test_date.clone()));
+        assert_month_date_year("Remind me on 12.5", Some(test_date.clone()));
+        assert_month_date_year("Remind me on 12.05", Some(test_date.clone()));
     }
 
     fn assert_date_month_year(input: &str, expects: Option<DateExpression>) {
