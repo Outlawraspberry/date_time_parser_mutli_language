@@ -56,7 +56,7 @@ fn assert_in_x_days(input: &str, in_days: i32, now: &NaiveDate, date_format: &Da
 
 
 #[test]
-fn qtest_a_specific_date_month() {
+fn test_a_specific_date_month() {
     let now = NaiveDate::from_ymd_opt(2024, 10, 1).unwrap();
     let date_format = DateFormat::DayMonthYear;
 
@@ -94,7 +94,7 @@ fn qtest_a_specific_date_month() {
 }
 
 #[test]
-fn test_a_specifig_month_date() {
+fn test_a_specific_month_date() {
     let now = NaiveDate::from_ymd_opt(2024, 10, 1).unwrap();
     let date_format = DateFormat::DayMonthYear;
 
