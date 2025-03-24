@@ -28,7 +28,7 @@ jobs:
 
       - name: Publish dry run
         run:
-          cargo login {{ secrets.CARGO_REGISTRY_TOKEN }}
+          cargo login ${{ secrets.CARGO_REGISTRY_TOKEN }}
           cargo publish
 
           version=$(grep '^version =' Cargo.toml | sed 's/version = //; s/"//g; s/ //g')
