@@ -10,22 +10,18 @@ jobs:
 
     name: 'test'
 
-    strategy:
-      matrix:
-        rust-channel: [ 'stable', 'nightly' ]
-        rust-host: [ 'x86_64-unknown-linux-gnu', 'i686-unknown-linux-gnu' ]
-
     steps:
       - uses: actions/checkout@master
         with:
           # get git tags info
           fetch-depth: 0
       
-      - name: Setup Rust
+      - uses: moonrepo/setup-rust@v1
         with:
-          rust-channel: ${{ matrix.rust-channel }}
-          rust-host: ${{ matrix.rust-host }}
-        uses: raftario/setup-rust-action@v1
+          channel: '1.65.0'
       
       - name: Test package
         run: cargo test
+
+      - name: Publish dry run
+        run: cargo publish --dry-run
