@@ -7,11 +7,11 @@ description = "date_time_parser_multi_language is a package designed to extract 
 homepage = "https://github.com/Outlawraspberry/date_time_parser_mutli_language"
 readme = "./README.adoc"
 keywords = [
-  "Date Parsing",
-  "Multi-language",
-  "String Interpretation",
-  "Internationalization",
-  "Date Extraction"
+  "date-parsing",
+  "multi-language",
+  "string-interpretation",
+  "internationalization",
+  "date-extraction"
 ]
 categories = ["date-and-time", "internationalization", "text-processing", "parser-implementations"]
 
