@@ -10,9 +10,6 @@ jobs:
 
     name: 'publish'
 
-    # Reference your environment variables
-    environment: cargo
-
     strategy:
       matrix:
         rust-channel: [ 'stable', 'nightly' ]
