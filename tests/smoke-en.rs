@@ -34,7 +34,7 @@ fn test_relative_weeks() {
     assert_in_x_days("Do something next week", 8, &now, &date_format); 
     assert_in_x_days("Do something this week", 1, &now, &date_format); 
 
-    assert_in_x_days("Do something in 2 weeks", 1 * 7, &now, &date_format);
+    assert_in_x_days("Do something in 2 weeks",  2 * 7, &now, &date_format);
     assert_in_x_days("Do something in 10 weeks", 10 * 7, &now, &date_format);
     assert_in_x_days("Do something in 100 weeks", 100 * 7, &now, &date_format);
 }
@@ -45,8 +45,9 @@ fn test_on_day_in_x_weeks() {
     let now = NaiveDate::from_ymd_opt(2024, 12, 1).unwrap();
     let date_format = DateFormat::DayMonthYear;
 
-    assert_in_x_days("Do something on monday next week", 1, &now, &date_format);
-    assert_in_x_days("Do something on monday in two weeks", 8, &now, &date_format);
+    assert_in_x_days("Do something on monday next week", 8, &now, &date_format);
+    assert_in_x_days("Do something on monday in two weeks", 14, &now, &date_format);
+    assert_in_x_days("Do something on monday in 120 weeks", 7 * 120, &now, &date_format);
 }
 
 fn assert_in_x_days(input: &str, in_days: i32, now: &NaiveDate, date_format: &DateFormat) {
@@ -163,11 +164,4 @@ fn test_a_specifig_month_date_year() {
 fn assert_specific_date(input: &str, expected_date: NaiveDate, now: &NaiveDate, date_format: &DateFormat) {
     assert_eq!(EnDateParser::search_relative_date_expression(input, now, date_format), Some(expected_date), 
     "failed to parse ${} as {}", input, expected_date);
-}
-
-fn assert_none(input: &str, now: &NaiveDate, date_format: &DateFormat) {
-    let result = EnDateParser::search_relative_date_expression(input, now, date_format);
-    assert_eq!(result.clone(), None, 
-    "Expected to parse None in ${} but found {:?}", input, result);
-
 }

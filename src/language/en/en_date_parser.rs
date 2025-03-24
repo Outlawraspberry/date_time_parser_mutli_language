@@ -11,7 +11,12 @@ use crate::{
 };
 
 use super::expressions::{
-    parse_date_in_week::parse_date_in_week, parse_day_alone::parse_day_alone, parse_in_n_months::parse_in_n_months, parse_keywords::parse_keywords, parse_month_date::parse_month_date, parse_relative_date::parse_relative_day, parse_relative_keywork_week::parse_keyword_relative_week, parse_relative_month::parse_relative_month
+    parse_date_in_week::parse_date_in_week, parse_date_in_x_weeks::parse_in_x_weeks,
+    parse_day_alone::parse_day_alone, parse_in_n_months::parse_in_n_months,
+    parse_keywords::parse_keywords, parse_month_date::parse_month_date,
+    parse_relative_date::parse_relative_day,
+    parse_relative_keywork_week::parse_keyword_relative_week,
+    parse_relative_month::parse_relative_month,
 };
 
 /// Parsing a str into a `MonthOfYear` uses english abbreviations and full names.
@@ -51,8 +56,27 @@ fn parse_month_of_year_english(text: &str) -> Option<Month> {
     None
 }
 
-pub struct EnDateParser {
+pub fn string_to_num_english(input: &str) -> Option<i32> {
+    let num = match input {
+        "one" => 1,
+        "two" => 2,
+        "three" => 3,
+        "four" => 4,
+        "five" => 5,
+        "six" => 6,
+        "seven" => 7,
+        "eight" => 8,
+        "nine" => 9,
+        "ten" => 10,
+        "eleven" => 11,
+        "twelve" => 12,
+        _ => return None, // Return None if it doesn't match
+    };
+
+    return Some(num);
 }
+
+pub struct EnDateParser {}
 
 impl Recognizable for DateExpression {
     fn recognize(input: &str, date_format: &DateFormat) -> Option<Self> {
@@ -61,6 +85,10 @@ impl Recognizable for DateExpression {
         }
 
         if let Some(date) = parse_keyword_relative_week(input, date_format) {
+            return Some(date);
+        }
+
+        if let Some(date) = parse_in_x_weeks(input) {
             return Some(date);
         }
 
@@ -151,7 +179,6 @@ impl DateParser for EnDateParser {
                         difference += 7;
                     }
 
-                    println!("{}", difference);
                     difference += 7 * (n as i32);
                     let dur = Duration::days(difference as i64);
                     return Some(now.checked_add_signed(dur).unwrap());

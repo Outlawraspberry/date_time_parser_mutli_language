@@ -57,11 +57,11 @@ impl Recognizable for Weekday {
 /// An abstract syntax for parsing dates.
 pub enum DateExpression {
     InXDays(i32),
-    DayInXWeeks(i8, Weekday), // e.g. next week monday => DayInXWeeks(1, Mon)
-    InXMonths(i32),           // e.g. in 2 months => InXMonths(2)
-    DayInMonth(Month, u32),   // e.g. June 8th => InMonth(Jun, 8)
+    DayInXWeeks(i32, Weekday), // e.g. next week monday => DayInXWeeks(1, Mon)
+    InXMonths(i32),            // e.g. in 2 months => InXMonths(2)
+    DayInMonth(Month, u32),    // e.g. June 8th => InMonth(Jun, 8)
     DayInMonthInYear(Month, u32, i32), // e.g. June 8th, 2019 => InYear(Jun, 8, 2019)
-    InMonthInYear(Month, i32)
+    InMonthInYear(Month, i32),
 }
 
 #[cfg(test)]

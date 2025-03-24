@@ -37,7 +37,7 @@ Modifications by Outlawraspberry UG (haftungsbeschränkt)
 
 use regex::Regex;
 
-use crate::language::shared::DateExpression;
+use crate::language::{en::en_date_parser::string_to_num_english, shared::DateExpression};
 
 /// Parses a `str` into an `Option` containing a `DateExpr::InNDays(i32)`
 pub fn parse_relative_day(text: &str) -> Option<DateExpression> {
@@ -53,21 +53,7 @@ pub fn parse_relative_day(text: &str) -> Option<DateExpression> {
             } else {
                 // Match textual representations
                 let num_str = num_match.as_str();
-                let num = match num_str {
-                    "one" => 1,
-                    "two" => 2,
-                    "three" => 3,
-                    "four" => 4,
-                    "five" => 5,
-                    "six" => 6,
-                    "seven" => 7,
-                    "eight" => 8,
-                    "nine" => 9,
-                    "ten" => 10,
-                    "eleven" => 11,
-                    "twelve" => 12,
-                    _ => return None, // Return None if it doesn't match
-                };
+                let num = string_to_num_english(num_str).unwrap();
                 return Some(DateExpression::InXDays(num));
             }
         }
@@ -92,8 +78,8 @@ mod parse_relative_date_works_when {
     fn test_parse_date_expression() {
         // Test cases for textual representations of numbers
         let cases = vec![
-            ("in one days", Some(DateExpression::InXDays(1))),
-            ("in One days", Some(DateExpression::InXDays(1))),
+            ("in one day", Some(DateExpression::InXDays(1))),
+            ("in One day", Some(DateExpression::InXDays(1))),
             ("in ONE days", Some(DateExpression::InXDays(1))),
             ("in two days", Some(DateExpression::InXDays(2))),
             ("in Two days", Some(DateExpression::InXDays(2))),

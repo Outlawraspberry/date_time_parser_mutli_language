@@ -83,7 +83,7 @@ mod parse_date_in_week_works_when {
         assert_day_in_n_weeks("next friday", Weekday::Fri, 1);
     }
 
-    fn assert_day_in_n_weeks(text: &str, day: Weekday, relative_week: i8) {
+    fn assert_day_in_n_weeks(text: &str, day: Weekday, relative_week: i32) {
         assert_eq!(
             parse_date_in_week(text, &DateFormat::DayMonthYear),
             Some(DateExpression::DayInXWeeks(relative_week, day))
