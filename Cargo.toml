@@ -25,6 +25,8 @@ keywords = [
 ]
 categories = ["date-and-time", "internationalization", "text-processing", "parser-implementations"]
 
+include = ["src", "Cargo.lock", "Cargo.toml", "CHANGELOG.adoc", "LICENSE", "README.adoc"]
+
 [dependencies]
 chrono = "0.4.40"
 regex = "1.11.1"
