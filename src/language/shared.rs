@@ -5,6 +5,7 @@ use crate::recognizable::Recognizable;
 pub enum DateFormat {
     DayMonthYear,
     MonthDayYear,
+    // todo is YearMonthDay a case?
 }
 
 #[derive(PartialEq, Debug, Clone)]
