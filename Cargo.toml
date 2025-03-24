@@ -8,20 +8,10 @@ homepage = "https://github.com/Outlawraspberry/date_time_parser_mutli_language"
 readme = "./README.adoc"
 keywords = [
   "Date Parsing",
-  "Time Parsing",
-  "Multi-language Support",
-  "Internationalization",
-  "Date Extraction",
+  "Multi-language",
   "String Interpretation",
-  "Localization",
-  "Rust Library",
-  "DateTime",
-  "Language-Agnostic",
-  "Natural Language Processing",
-  "Date Formats",
-  "Time Zones",
-  "Parsing Library",
-  "Cross-Language"
+  "Internationalization",
+  "Date Extraction"
 ]
 categories = ["date-and-time", "internationalization", "text-processing", "parser-implementations"]
 
