@@ -80,7 +80,7 @@ impl Recognizable for DateExpression {
                 }
             }
         }
-        
+
         if let Some(date) = parse_month_date(input, date_format) {
             return Some(date);
         }
@@ -88,15 +88,15 @@ impl Recognizable for DateExpression {
         if let Some(date) = parse_date_in_week(input, date_format) {
             return Some(date);
         }
-        
+
         if let Some(date) = parse_in_n_months(input) {
             return Some(date);
         }
-        
+
         if let Some(date) = parse_relative_month(input) {
             return Some(date);
         }
-        
+
         if let Some(date) = parse_day_alone(input) {
             return Some(date);
         }
@@ -140,7 +140,7 @@ impl DateParser for EnDateParser {
 
                 DateExpression::DayInMonthInYear(month, day, year) => {
                     return NaiveDate::from_ymd_opt(year, month as u32, day);
-                },
+                }
 
                 DateExpression::DayInXWeeks(n, d) => {
                     let mut difference: i32 = (d.num_days_from_sunday() as i32)
