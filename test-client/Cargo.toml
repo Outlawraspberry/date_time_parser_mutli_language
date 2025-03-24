@@ -1,0 +1,9 @@
+[package]
+name = "test-client"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+chrono = "0.4.40"
+
+date_time_parser_multi_language = { path = "../"}

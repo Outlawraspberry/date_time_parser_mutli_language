@@ -1,7 +1,31 @@
 [package]
-name = "date-parser"
+name = "date_time_parser_multi_language"
 version = "0.1.0"
 edition = "2021"
+license = "MIT"
+description = "date_time_parser_multi_language is a package designed to extract and interpret date information from strings across multiple languages."
+homepage = "https://github.com/Outlawraspberry/date_time_parser_mutli_language"
+readme = "./README.adoc"
+keywords = [
+  "Date Parsing",
+  "Time Parsing",
+  "Multi-language Support",
+  "Internationalization",
+  "Date Extraction",
+  "String Interpretation",
+  "Localization",
+  "Rust Library",
+  "DateTime",
+  "Language-Agnostic",
+  "Natural Language Processing",
+  "Date Formats",
+  "Time Zones",
+  "Parsing Library",
+  "Cross-Language"
+]
+categories = ["date-and-time", "internationalization", "text-processing", "parser-implementations"]
+
+include = ["src", "Cargo.lock", "Cargo.toml", "CHANGELOG.adoc", "LICENSE", "README.adoc"]
 
 [dependencies]
 chrono = "0.4.40"

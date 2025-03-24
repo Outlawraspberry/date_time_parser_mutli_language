@@ -1,0 +1,45 @@
+= Date Time parser for multiple languages
+
+Welcome to the `date_time_parser_multi_language` package. ☺️
+This package can be used to parse date information out of strings.
+The title is missleading at the moment, because it doesn't support time parsing.
+For now!
+
+Date information can be parsed out of natural language strings like `Do something tomorrow`, or `Reminde me in three weeks`.
+Stuff like that, what you may need when you create a todo app or so.
+
+== How to use the package
+
+Before you can start, you have to determine some things.
+
+1. Which language do you want to parse.
+   Check <<Supported Languages>>, to check if the language you need is implemented
+   If the language is missing, feel free to extend the package.
+2. Which date format you want to use.
+   In the US it is common to use MM.DD.YYYY, in Europe it is DD.MM.YYYY.
+   This setting influences the parsing heavily.
+
+Below, you will find a basic example.
+
+```rust
+include::examples/en.rs[]
+```
+
+In the link:./examples[examples directory] you can find more examples.
+Alternativelly, you can checkout the `test-client`, there you can test the parsing too.
+
+== Supported Languages 
+
+[cols="1,1,1"]
+
+|===
+
+| Language
+| Code
+| State
+
+| English
+| EN
+| Experimental
+
+|===

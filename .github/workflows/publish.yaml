@@ -1,0 +1,41 @@
+name: Publish to crates.io
+
+on:
+  push:
+    branches: [ master , main ]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    name: 'publish'
+
+    # Reference your environment variables
+    environment: cargo
+
+    steps:
+      - uses: actions/checkout@master
+        with:
+          # get git tags info
+          fetch-depth: 0
+      
+      - uses: moonrepo/setup-rust@v1
+        with:
+          channel: '1.65.0'
+      
+      - name: Test package
+        run: cargo test
+
+      - name: Publish dry run
+        run:
+          cargo login {{ secrets.CARGO_REGISTRY_TOKEN }}
+          cargo publish
+
+          version=$(grep '^version =' Cargo.toml | sed 's/version = //; s/"//g; s/ //g')
+
+          git config user.name "Outlawraspberry DEV Account"
+          git config user.email "dev@outlawraspberry.de"
+
+          git tag -a v$version -m "Release version $version"
+          
+          
