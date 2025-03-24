@@ -43,7 +43,7 @@ use crate::recognizable::Recognizable;
 pub fn parse_month_date(text: &str, date_format: &DateFormat) -> Option<DateExpression> {
     //june 1, june 1st
 
-    let re = Regex::new(r"(?i)(?P<date>\d{1,2})?(th)?\s*(of\s*)?(?P<month>jan|january|feb|mar|april|may|jun|jul|aug|sep|oct|nov|dec)(r?uary|ch|il|e|y|ust|tember|ober|ember|\b)|(?P<month2>jan|january|feb|mar|april|may|jun|jul|aug|sep|oct|nov|dec)(r?uary|ch|il|e|y|ust|tember|ober|ember|\b)\s*(?P<date2>\d{1,2})?(th)?").unwrap();
+    let re = Regex::new(r"(?i)(?P<date>\d{1,2})(th)?\s*(of\s*)?(?P<month>jan|january|feb|mar|april|may|jun|jul|aug|sep|oct|nov|dec)(r?uary|ch|il|e|y|ust|tember|ober|ember|\b)|(?P<month2>jan|january|feb|mar|april|may|jun|jul|aug|sep|oct|nov|dec)(r?uary|ch|il|e|y|ust|tember|ober|ember|\b)\s*(?P<date2>\d{1,2})(th)?").unwrap();
 
     if let Some(caps) = re.captures(text) {
         if let Some(month_match) = caps.name("month").or(caps.name("month2")) {

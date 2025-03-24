@@ -29,13 +29,14 @@ fn test_relative_weeks() {
     let now = NaiveDate::from_ymd_opt(2024, 12, 1).unwrap();
     let date_format = DateFormat::DayMonthYear;
 
-    // todo add next week / relative keyword weeks
-    //assert_in_x_weeks("Do something next week", 1, &now, &date_format); 
-    //assert_in_x_weeks("Do something this week", 0, &now, &date_format); 
+    // todo introduce start of the week. 
+    // 8 is the correct amount of days, because atm. it is expected that the week starts on sunday
+    assert_in_x_days("Do something next week", 8, &now, &date_format); 
+    assert_in_x_days("Do something this week", 1, &now, &date_format); 
 
-    assert_in_x_days("Do something in 2 week", 1 * 7, &now, &date_format);
-    assert_in_x_days("Do something in 10 week", 10 * 7, &now, &date_format);
-    assert_in_x_days("Do something in 100 week", 100 * 7, &now, &date_format);
+    assert_in_x_days("Do something in 2 weeks", 1 * 7, &now, &date_format);
+    assert_in_x_days("Do something in 10 weeks", 10 * 7, &now, &date_format);
+    assert_in_x_days("Do something in 100 weeks", 100 * 7, &now, &date_format);
 }
 
 #[test]
@@ -162,4 +163,11 @@ fn test_a_specifig_month_date_year() {
 fn assert_specific_date(input: &str, expected_date: NaiveDate, now: &NaiveDate, date_format: &DateFormat) {
     assert_eq!(EnDateParser::search_relative_date_expression(input, now, date_format), Some(expected_date), 
     "failed to parse ${} as {}", input, expected_date);
+}
+
+fn assert_none(input: &str, now: &NaiveDate, date_format: &DateFormat) {
+    let result = EnDateParser::search_relative_date_expression(input, now, date_format);
+    assert_eq!(result.clone(), None, 
+    "Expected to parse None in ${} but found {:?}", input, result);
+
 }

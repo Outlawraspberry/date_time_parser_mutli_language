@@ -11,10 +11,7 @@ use crate::{
 };
 
 use super::expressions::{
-    parse_date_in_week::parse_date_in_week, parse_day_alone::parse_day_alone,
-    parse_in_n_months::parse_in_n_months, parse_keywords::parse_keywords,
-    parse_month_date::parse_month_date, parse_relative_date::parse_relative_day,
-    parse_relative_month::parse_relative_month,
+    parse_date_in_week::parse_date_in_week, parse_day_alone::parse_day_alone, parse_in_n_months::parse_in_n_months, parse_keywords::parse_keywords, parse_month_date::parse_month_date, parse_relative_date::parse_relative_day, parse_relative_keywork_week::parse_keyword_relative_week, parse_relative_month::parse_relative_month
 };
 
 /// Parsing a str into a `MonthOfYear` uses english abbreviations and full names.
@@ -55,12 +52,15 @@ fn parse_month_of_year_english(text: &str) -> Option<Month> {
 }
 
 pub struct EnDateParser {
-    date_format: DateFormat,
 }
 
 impl Recognizable for DateExpression {
     fn recognize(input: &str, date_format: &DateFormat) -> Option<Self> {
         if let Some(date) = parse_keywords(input) {
+            return Some(date);
+        }
+
+        if let Some(date) = parse_keyword_relative_week(input, date_format) {
             return Some(date);
         }
 
@@ -143,11 +143,15 @@ impl DateParser for EnDateParser {
                 }
 
                 DateExpression::DayInXWeeks(n, d) => {
+                    // we expect, that the week is starting on sunday here, but that's not true everywhere.
                     let mut difference: i32 = (d.num_days_from_sunday() as i32)
                         - (now.weekday().num_days_from_sunday() as i32);
+
                     if difference < 0 {
                         difference += 7;
                     }
+
+                    println!("{}", difference);
                     difference += 7 * (n as i32);
                     let dur = Duration::days(difference as i64);
                     return Some(now.checked_add_signed(dur).unwrap());
