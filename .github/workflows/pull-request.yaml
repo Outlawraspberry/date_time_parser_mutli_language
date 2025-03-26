@@ -1,14 +1,19 @@
 name: Default test pipeline
 
 on:
-  workflow_dispatch:
+  push:
+    branches-ignore: [ main, master ]
   pull_request:
+    types: [opened, synchronize, reopened]
     
 
 jobs:
   build_and_test:
     name: Build and Test Rust Project
     runs-on: ubuntu-latest
+   
+    if: github.event_name == 'push' && github.event.pull_request
+   
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -27,6 +32,8 @@ jobs:
   check_version_change:
     name: Check Version Change
     runs-on: ubuntu-latest
+    
+    if: github.event_name == 'push' && github.event.pull_request
 
     outputs:
       version_changed: ${{ steps.check_version.outputs.version_changed }}
