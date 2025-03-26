@@ -53,10 +53,10 @@ jobs:
           main_version=$(grep '^version =' Cargo.toml | sed 's/version = //; s/"//g; s/ //g')
           git checkout -- Cargo.toml
           echo "Main branch version: $main_version"
-          echo "Current version: $steps.get_version.outputs.current_version"
-          if [ "$steps.get_version.outputs.current_version" != "$main_version" ]; then
+          echo "Current version: ${{steps.get_version.outputs.current_version}}"
+          if [ "${{steps.get_version.outputs.current_version}}" != "$main_version" ]; then
               echo "version_changed=true" >> /tmp/x
-              echo "new_version=$steps.get_version.outputs.current_version" >> /tmp/x
+              echo "new_version=${{steps.get_version.outputs.current_version}}" >> /tmp/x
           else
               echo "version_changed=false" >> /tmp/x
           fi
