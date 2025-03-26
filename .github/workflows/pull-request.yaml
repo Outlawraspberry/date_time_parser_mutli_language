@@ -1,0 +1,63 @@
+name: Default test pipeline
+
+on:
+  workflow_dispatch:
+  pull_request:
+    
+
+jobs:
+  build_and_test:
+    name: Build and Test Rust Project
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Rust
+        uses: moonrepo/setup-rust@v1
+        with:
+          channel: '1.82.0'
+
+      - name: Build the project
+        run: cargo build --release
+
+      - name: Run tests
+        run: cargo test --verbose
+
+  check_version_change:
+    name: Check Version Change
+    runs-on: ubuntu-latest
+
+    outputs:
+      version_changed: ${{ steps.check_version.outputs.version_changed }}
+      new_version: ${{ steps.check_version.outputs.new_version }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for all branches and tags
+
+      - name: Get current version
+        id: get_version
+        run: |
+          version=$(grep '^version =' Cargo.toml | sed 's/version = //; s/"//g; s/ //g')
+          echo "Current version: $version"
+          echo "current_version=$version" >> $GITHUB_OUTPUT
+
+      - name: Check version change
+        id: check_version
+        run: |
+          git fetch origin main
+          git checkout origin/main -- Cargo.toml
+          main_version=$(grep '^version =' Cargo.toml | sed 's/version = //; s/"//g; s/ //g')
+          git checkout -- Cargo.toml
+          echo "Main branch version: $main_version"
+          echo "Current version: $steps.get_version.outputs.current_version"
+          if [ "$steps.get_version.outputs.current_version" != "$main_version" ]; then
+              echo "version_changed=true" >> /tmp/x
+              echo "new_version=$steps.get_version.outputs.current_version" >> /tmp/x
+          else
+              echo "version_changed=false" >> /tmp/x
+          fi
+
