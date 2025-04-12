@@ -8,6 +8,11 @@ pub enum DateFormat {
     // todo is YearMonthDay a case?
 }
 
+pub enum StartDayOfWeek {
+    Sunday,
+    Monday
+}
+
 #[derive(PartialEq, Debug, Clone)]
 pub enum Month {
     January = 1,

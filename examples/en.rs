@@ -1,4 +1,4 @@
-use date_time_parser_multi_language::{DateFormat, DateParser, EnDateParser};
+use date_time_parser_multi_language::{DateFormat, DateParser, EnDateParser, StartDayOfWeek};
 
 fn main() {
     let some_input = "Remind me that I have to check my mails tomorrow.";
@@ -6,7 +6,7 @@ fn main() {
     let now = chrono::Utc::now().naive_local().date();
 
     let date =
-        EnDateParser::search_relative_date_expression(some_input, &now, &DateFormat::DayMonthYear);
+        EnDateParser::search_relative_date_expression(some_input, &now, &DateFormat::DayMonthYear, &StartDayOfWeek::Monday);
 
     println!("I found the date {:?}", date);
 }

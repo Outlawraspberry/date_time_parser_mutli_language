@@ -4,7 +4,7 @@ use regex::Regex;
 use crate::{
     date_parser::DateParser,
     language::{
-        shared::{DateExpression, DateFormat, Month},
+        shared::{DateExpression, DateFormat, Month, StartDayOfWeek},
         shared_date_parser::{parse_date_month_year, parse_month_date_year},
     },
     recognizable::Recognizable,
@@ -140,7 +140,7 @@ impl Recognizable for DateExpression {
 /// The EnDateParser can be used to parse english date information out of strings.
 ///
 /// ```
-/// use date_time_parser_multi_language::{DateFormat, DateParser, EnDateParser};
+/// use date_time_parser_multi_language::{DateFormat, DateParser, EnDateParser, StartDayOfWeek};
 //
 /// fn main() {
 ///
@@ -148,7 +148,7 @@ impl Recognizable for DateExpression {
 ///
 ///     let now = chrono::Utc::now().naive_local().date();
 ///
-///     let date = EnDateParser::search_relative_date_expression(some_input, &now, &DateFormat::DayMonthYear);
+///     let date = EnDateParser::search_relative_date_expression(some_input, &now, &DateFormat::DayMonthYear, &StartDayOfWeek::Monday);
 ///
 ///     println!("I found the date {:?}", date);
 /// }
@@ -158,6 +158,7 @@ impl DateParser for EnDateParser {
         text: &str,
         now: &NaiveDate,
         date_format: &DateFormat,
+        start_day_week: &StartDayOfWeek
     ) -> Option<NaiveDate> {
         if let Some(date_expr) = DateExpression::recognize(text, date_format) {
             match date_expr {
@@ -187,9 +188,16 @@ impl DateParser for EnDateParser {
                 }
 
                 DateExpression::DayInXWeeks(n, d) => {
-                    // we expect, that the week is starting on sunday here, but that's not true everywhere.
-                    let mut difference: i32 = (d.num_days_from_sunday() as i32)
-                        - (now.weekday().num_days_from_sunday() as i32);
+                    let mut difference: i32 = match start_day_week {
+                        StartDayOfWeek::Sunday => {
+                            (d.num_days_from_sunday() as i32)
+                            - (now.weekday().num_days_from_sunday() as i32)    
+                        }
+                        StartDayOfWeek::Monday => {
+                            (d.num_days_from_monday() as i32)
+                            - (now.weekday().num_days_from_monday() as i32)
+                        }
+                    };
 
                     if difference < 0 {
                         difference += 7;
