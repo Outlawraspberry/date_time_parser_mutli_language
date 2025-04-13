@@ -80,22 +80,37 @@ pub struct EnDateParser {}
 
 impl Recognizable for DateExpression {
     fn recognize(input: &str, date_format: &DateFormat) -> Option<Self> {
+        // things like today, tomorrow, yesterday
         if let Some(date) = parse_keywords(input) {
             return Some(date);
         }
 
+        // parses next monday or last tuesday
+        if let Some(date) = parse_date_in_week(input, date_format) {
+            return Some(date);
+        }
+
+        // parse a single day of the week
+        if let Some(date) = parse_day_alone(input) {
+            return Some(date);
+        }
+
+        // next week, last week, this week
         if let Some(date) = parse_keyword_relative_week(input, date_format) {
             return Some(date);
         }
 
+        // in x weeks like in three weeks or in 3 weeks
         if let Some(date) = parse_in_x_weeks(input) {
             return Some(date);
         }
 
+        // things like in three days or in four days 
         if let Some(date) = parse_relative_day(input) {
             return Some(date);
         }
 
+        // parses date full dates in DD.MM.YYYY or MM.DD.YYYY formats
         match date_format {
             DateFormat::DayMonthYear => {
                 if let Some(date) = parse_date_month_year(input) {
@@ -109,23 +124,18 @@ impl Recognizable for DateExpression {
             }
         }
 
+        // parses 12th of january or 5th of may 
         if let Some(date) = parse_month_date(input, date_format) {
             return Some(date);
         }
 
-        if let Some(date) = parse_date_in_week(input, date_format) {
-            return Some(date);
-        }
-
+        // parses in n months
         if let Some(date) = parse_in_n_months(input) {
             return Some(date);
         }
 
+        // parse next month, last month or this month
         if let Some(date) = parse_relative_month(input) {
-            return Some(date);
-        }
-
-        if let Some(date) = parse_day_alone(input) {
             return Some(date);
         }
 
@@ -158,15 +168,18 @@ impl DateParser for EnDateParser {
         text: &str,
         now: &NaiveDate,
         date_format: &DateFormat,
-        start_day_week: &StartDayOfWeek
+        start_day_week: &StartDayOfWeek,
     ) -> Option<NaiveDate> {
         if let Some(date_expr) = DateExpression::recognize(text, date_format) {
             match date_expr {
                 DateExpression::InXDays(days) => {
+                    println!("InXDays: {}", days);
                     return Some(now.checked_add_days(Days::new(days as u64)).unwrap());
                 }
 
                 DateExpression::DayInMonth(month, day) => {
+
+                    println!("DayInMonth: Month: {:?} day: {}", month, day);
                     let new_date = NaiveDate::from_ymd_opt(now.year(), month as u32, day);
 
                     match new_date {
@@ -184,37 +197,59 @@ impl DateParser for EnDateParser {
                 }
 
                 DateExpression::DayInMonthInYear(month, day, year) => {
+                    println!("DayInMonthInYear: Month: {:?} day: {} year: {}", month, day, year);
                     return NaiveDate::from_ymd_opt(year, month as u32, day);
                 }
 
+                DateExpression::InXWeeks(n) => {
+                    println!("InXWeeks: {}", n);
+                    let mut difference = 7 * (n as i32);
+
+                    difference -= match start_day_week {
+                        StartDayOfWeek::Sunday => now.weekday().num_days_from_sunday() as i32,
+                        StartDayOfWeek::Monday => now.weekday().num_days_from_monday() as i32,
+                    };
+
+                    println!("Difference: {}", difference);
+                    
+                    let dur = Duration::days(difference as i64);
+                    return Some(now.checked_add_signed(dur).unwrap());
+                }
+
                 DateExpression::DayInXWeeks(n, d) => {
-                    let mut difference: i32 = match start_day_week {
+                    println!("DayInXWeeks: in weeks: {} weekday: {:?} ", n, d);
+
+                    let mut difference = 7 * (n as i32);
+
+                    println!("Diff {}", difference);
+
+                    difference += match start_day_week {
                         StartDayOfWeek::Sunday => {
                             (d.num_days_from_sunday() as i32)
-                            - (now.weekday().num_days_from_sunday() as i32)    
+                                - (now.weekday().num_days_from_sunday() as i32)
                         }
                         StartDayOfWeek::Monday => {
                             (d.num_days_from_monday() as i32)
-                            - (now.weekday().num_days_from_monday() as i32)
+                                - (now.weekday().num_days_from_monday() as i32)
                         }
                     };
 
-                    if difference < 0 {
-                        difference += 7;
-                    }
+                    println!("Diff {}; {} - {}", difference, d.num_days_from_monday(), (now.weekday().num_days_from_monday()));
 
-                    difference += 7 * (n as i32);
                     let dur = Duration::days(difference as i64);
                     return Some(now.checked_add_signed(dur).unwrap());
                 }
 
                 DateExpression::InXMonths(n) => {
+                    println!("InXMonths: {} ", n);
+
                     let now_month = now.month();
                     let to_month = (now_month as i32) + n;
                     return NaiveDate::from_ymd_opt(now.year(), to_month as u32, now.day());
                 }
 
                 DateExpression::InMonthInYear(month, year) => {
+                    println!("DayInXWeeks: month: {:?} year: {} ", month, year);
                     return NaiveDate::from_ymd_opt(year, month as u32, 1);
                 }
             }
