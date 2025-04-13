@@ -10,7 +10,7 @@ pub enum DateFormat {
 
 pub enum StartDayOfWeek {
     Sunday,
-    Monday
+    Monday,
 }
 
 #[derive(PartialEq, Debug, Clone)]
@@ -62,6 +62,7 @@ impl Recognizable for Weekday {
 /// An abstract syntax for parsing dates.
 pub enum DateExpression {
     InXDays(i32),
+    InXWeeks(i32),
     DayInXWeeks(i32, Weekday), // e.g. next week monday => DayInXWeeks(1, Mon)
     InXMonths(i32),            // e.g. in 2 months => InXMonths(2)
     DayInMonth(Month, u32),    // e.g. June 8th => InMonth(Jun, 8)

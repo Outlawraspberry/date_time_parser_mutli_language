@@ -1,5 +1,5 @@
 use std::io::stdin;
-use date_time_parser_multi_language::{DateFormat, DateParser, EnDateParser};
+use date_time_parser_multi_language::{DateFormat, DateParser, EnDateParser, StartDayOfWeek};
 
 fn main() {
 
@@ -34,7 +34,7 @@ fn parser_date() {
     stdin().read_line(&mut message).unwrap();
 
     let now = chrono::Utc::now().naive_local().date();
-    let date = EnDateParser::search_relative_date_expression(&message, &now, &DateFormat::DayMonthYear);
+    let date = EnDateParser::search_relative_date_expression(&message, &now, &DateFormat::DayMonthYear, &StartDayOfWeek::Monday);
 
     match date {
         Some(date) => {

@@ -2,7 +2,7 @@ use regex::Regex;
 
 use crate::language::shared::{DateExpression, DateFormat};
 
-/// Parses a `str` into an `Option` containing a `DateExpression::DayInXWeeks(i8)`
+/// Parses a `str` into an `Option` containing a `DateExpression::InXWeeks(i8)`
 pub fn parse_keyword_relative_week(
     text: &str,
     _date_format: &DateFormat,
@@ -18,10 +18,7 @@ pub fn parse_keyword_relative_week(
                 _ => 0,
             };
 
-            return Some(DateExpression::DayInXWeeks(
-                relative_week,
-                chrono::Weekday::Mon,
-            ));
+            return Some(DateExpression::InXWeeks(relative_week));
         }
     }
 
@@ -42,10 +39,7 @@ mod parse_keyword_based_relative_week {
     fn assert_day_in_n_weeks(text: &str, relative_week: i32) {
         assert_eq!(
             parse_keyword_relative_week(text, &DateFormat::DayMonthYear),
-            Some(DateExpression::DayInXWeeks(
-                relative_week,
-                chrono::Weekday::Mon
-            ))
+            Some(DateExpression::InXWeeks(relative_week,))
         )
     }
 }
