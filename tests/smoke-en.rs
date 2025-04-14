@@ -155,14 +155,14 @@ fn test_on_day_in_x_weeks() {
     );
     assert_in_x_days(
         "Do something on tuesday in two weeks",
-        8,
+        9,
         &now,
         &date_format,
         &start_of_week,
     );
     assert_in_x_days(
         "Do something on tuesday in 120 weeks",
-        7 * 120,
+        7 * 119 + 2,
         &now,
         &date_format,
         &start_of_week,
@@ -180,7 +180,9 @@ fn assert_in_x_days(
     if in_days >= 0 {
         expected_date = now.checked_add_days(Days::new(in_days as u64)).unwrap();
     } else {
-        expected_date = now.checked_sub_days(Days::new(in_days.abs() as u64)).unwrap();
+        expected_date = now
+            .checked_sub_days(Days::new(in_days.abs() as u64))
+            .unwrap();
     }
 
     assert_eq!(

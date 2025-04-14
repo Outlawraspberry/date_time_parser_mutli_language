@@ -1,4 +1,4 @@
-use chrono::{Datelike, Days, Duration, Months, NaiveDate};
+use chrono::{Datelike, Days, Duration, Months, NaiveDate, Weekday};
 use regex::Regex;
 
 use crate::{
@@ -12,7 +12,8 @@ use crate::{
 
 use super::expressions::{
     parse_date_in_week::parse_date_in_week, parse_date_in_x_weeks::parse_in_x_weeks,
-    parse_day_alone::parse_day_alone, parse_in_n_months::parse_in_n_months,
+    parse_day_alone::parse_day_alone, parse_day_in_explicit_weeks::parse_day_in_explicit_week,
+    parse_day_in_relative_week::parse_day_in_relative_week, parse_in_n_months::parse_in_n_months,
     parse_keywords::parse_keywords, parse_month_date::parse_month_date,
     parse_relative_date::parse_relative_day,
     parse_relative_keywork_week::parse_keyword_relative_week,
@@ -76,12 +77,32 @@ pub fn string_to_num_english(input: &str) -> Option<i32> {
     return Some(num);
 }
 
+pub fn weekday_to_english(input: &Weekday) -> &str {
+    match input {
+        Weekday::Mon => "monday",
+        Weekday::Tue => "tuesday",
+        Weekday::Wed => "wednesday",
+        Weekday::Thu => "thursday",
+        Weekday::Fri => "friday",
+        Weekday::Sat => "saturday",
+        Weekday::Sun => "sunday",
+    }
+}
+
 pub struct EnDateParser {}
 
 impl Recognizable for DateExpression {
     fn recognize(input: &str, date_format: &DateFormat) -> Option<Self> {
         // things like today, tomorrow, yesterday
         if let Some(date) = parse_keywords(input) {
+            return Some(date);
+        }
+
+        if let Some(date) = parse_day_in_relative_week(input) {
+            return Some(date);
+        }
+
+        if let Some(date) = parse_day_in_explicit_week(input) {
             return Some(date);
         }
 
@@ -105,7 +126,7 @@ impl Recognizable for DateExpression {
             return Some(date);
         }
 
-        // things like in three days or in four days 
+        // things like in three days or in four days
         if let Some(date) = parse_relative_day(input) {
             return Some(date);
         }
@@ -124,7 +145,7 @@ impl Recognizable for DateExpression {
             }
         }
 
-        // parses 12th of january or 5th of may 
+        // parses 12th of january or 5th of may
         if let Some(date) = parse_month_date(input, date_format) {
             return Some(date);
         }
@@ -178,7 +199,6 @@ impl DateParser for EnDateParser {
                 }
 
                 DateExpression::DayInMonth(month, day) => {
-
                     println!("DayInMonth: Month: {:?} day: {}", month, day);
                     let new_date = NaiveDate::from_ymd_opt(now.year(), month as u32, day);
 
@@ -197,7 +217,10 @@ impl DateParser for EnDateParser {
                 }
 
                 DateExpression::DayInMonthInYear(month, day, year) => {
-                    println!("DayInMonthInYear: Month: {:?} day: {} year: {}", month, day, year);
+                    println!(
+                        "DayInMonthInYear: Month: {:?} day: {} year: {}",
+                        month, day, year
+                    );
                     return NaiveDate::from_ymd_opt(year, month as u32, day);
                 }
 
@@ -211,7 +234,7 @@ impl DateParser for EnDateParser {
                     };
 
                     println!("Difference: {}", difference);
-                    
+
                     let dur = Duration::days(difference as i64);
                     return Some(now.checked_add_signed(dur).unwrap());
                 }
@@ -234,7 +257,12 @@ impl DateParser for EnDateParser {
                         }
                     };
 
-                    println!("Diff {}; {} - {}", difference, d.num_days_from_monday(), (now.weekday().num_days_from_monday()));
+                    println!(
+                        "Diff {}; {} - {}",
+                        difference,
+                        d.num_days_from_monday(),
+                        (now.weekday().num_days_from_monday())
+                    );
 
                     let dur = Duration::days(difference as i64);
                     return Some(now.checked_add_signed(dur).unwrap());
