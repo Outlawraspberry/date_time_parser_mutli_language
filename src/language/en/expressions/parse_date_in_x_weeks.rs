@@ -11,11 +11,11 @@ pub fn parse_in_x_weeks(text: &str) -> Option<DateExpression> {
     if let Some(caps) = re.captures(&String::from(text).trim().to_lowercase()) {
         if let Some(num_match) = caps.name("num") {
             if let Ok(num) = num_match.as_str().parse::<i32>() {
-                return Some(DateExpression::DayInXWeeks(num, chrono::Weekday::Sun));
+                return Some(DateExpression::InXWeeks(num));
             } else {
                 let num_str = num_match.as_str();
                 let num = string_to_num_english(num_str).unwrap();
-                return Some(DateExpression::DayInXWeeks(num, chrono::Weekday::Sun));
+                return Some(DateExpression::InXWeeks(num));
             }
         }
     }
@@ -26,7 +26,6 @@ pub fn parse_in_x_weeks(text: &str) -> Option<DateExpression> {
 #[cfg(test)]
 mod parse_relative_date_works_when {
     use crate::language::shared::DateExpression;
-    use chrono::Weekday;
 
     use super::parse_in_x_weeks;
 
@@ -41,70 +40,22 @@ mod parse_relative_date_works_when {
     fn test_parse_date_expression() {
         // Test cases for textual representations of numbers
         let cases = vec![
-            (
-                "in one week",
-                Some(DateExpression::DayInXWeeks(1, Weekday::Sun)),
-            ),
-            (
-                "in One week",
-                Some(DateExpression::DayInXWeeks(1, Weekday::Sun)),
-            ),
-            (
-                "in ONE weeks",
-                Some(DateExpression::DayInXWeeks(1, Weekday::Sun)),
-            ),
-            (
-                "in two weeks",
-                Some(DateExpression::DayInXWeeks(2, Weekday::Sun)),
-            ),
-            (
-                "in Two weeks",
-                Some(DateExpression::DayInXWeeks(2, Weekday::Sun)),
-            ),
-            (
-                "in TWO weeks",
-                Some(DateExpression::DayInXWeeks(2, Weekday::Sun)),
-            ),
-            (
-                "in three weeks",
-                Some(DateExpression::DayInXWeeks(3, Weekday::Sun)),
-            ),
-            (
-                "in four weeks",
-                Some(DateExpression::DayInXWeeks(4, Weekday::Sun)),
-            ),
-            (
-                "in five weeks",
-                Some(DateExpression::DayInXWeeks(5, Weekday::Sun)),
-            ),
-            (
-                "in six weeks",
-                Some(DateExpression::DayInXWeeks(6, Weekday::Sun)),
-            ),
-            (
-                "in seven weeks",
-                Some(DateExpression::DayInXWeeks(7, Weekday::Sun)),
-            ),
-            (
-                "in eight weeks",
-                Some(DateExpression::DayInXWeeks(8, Weekday::Sun)),
-            ),
-            (
-                "in nine weeks",
-                Some(DateExpression::DayInXWeeks(9, Weekday::Sun)),
-            ),
-            (
-                "in ten weeks",
-                Some(DateExpression::DayInXWeeks(10, Weekday::Sun)),
-            ),
-            (
-                "in eleven weeks",
-                Some(DateExpression::DayInXWeeks(11, Weekday::Sun)),
-            ),
-            (
-                "in twelve weeks",
-                Some(DateExpression::DayInXWeeks(12, Weekday::Sun)),
-            ),
+            ("in one week", Some(DateExpression::InXWeeks(1))),
+            ("in One week", Some(DateExpression::InXWeeks(1))),
+            ("in ONE weeks", Some(DateExpression::InXWeeks(1))),
+            ("in two weeks", Some(DateExpression::InXWeeks(2))),
+            ("in Two weeks", Some(DateExpression::InXWeeks(2))),
+            ("in TWO weeks", Some(DateExpression::InXWeeks(2))),
+            ("in three weeks", Some(DateExpression::InXWeeks(3))),
+            ("in four weeks", Some(DateExpression::InXWeeks(4))),
+            ("in five weeks", Some(DateExpression::InXWeeks(5))),
+            ("in six weeks", Some(DateExpression::InXWeeks(6))),
+            ("in seven weeks", Some(DateExpression::InXWeeks(7))),
+            ("in eight weeks", Some(DateExpression::InXWeeks(8))),
+            ("in nine weeks", Some(DateExpression::InXWeeks(9))),
+            ("in ten weeks", Some(DateExpression::InXWeeks(10))),
+            ("in eleven weeks", Some(DateExpression::InXWeeks(11))),
+            ("in twelve weeks", Some(DateExpression::InXWeeks(12))),
         ];
 
         for (input, expected) in cases {
@@ -132,9 +83,6 @@ mod parse_relative_date_works_when {
     }
 
     fn assert_in_n_days(text: &str, n: i32) {
-        assert_eq!(
-            parse_in_x_weeks(text),
-            Some(DateExpression::DayInXWeeks(n, Weekday::Sun))
-        )
+        assert_eq!(parse_in_x_weeks(text), Some(DateExpression::InXWeeks(n)))
     }
 }
