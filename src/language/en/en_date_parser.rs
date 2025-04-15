@@ -1,4 +1,5 @@
 use chrono::{Datelike, Days, Duration, Months, NaiveDate, Weekday};
+use log::debug;
 use regex::Regex;
 
 use crate::{
@@ -194,12 +195,14 @@ impl DateParser for EnDateParser {
         if let Some(date_expr) = DateExpression::recognize(text, date_format) {
             match date_expr {
                 DateExpression::InXDays(days) => {
-                    println!("InXDays: {}", days);
+                    debug!("InXDays; days: {}", days);
+
                     return Some(now.checked_add_days(Days::new(days as u64)).unwrap());
                 }
 
                 DateExpression::DayInMonth(month, day) => {
-                    println!("DayInMonth: Month: {:?} day: {}", month, day);
+                    debug!("DayInMonth; Month: {:?}; Day: {}", month, day);
+
                     let new_date = NaiveDate::from_ymd_opt(now.year(), month as u32, day);
 
                     match new_date {
@@ -217,67 +220,57 @@ impl DateParser for EnDateParser {
                 }
 
                 DateExpression::DayInMonthInYear(month, day, year) => {
-                    println!(
-                        "DayInMonthInYear: Month: {:?} day: {} year: {}",
+                    debug!(
+                        "DayInMonthInYear; Month: {:?}; Day: {}; Year: {}",
                         month, day, year
                     );
                     return NaiveDate::from_ymd_opt(year, month as u32, day);
                 }
 
-                DateExpression::InXWeeks(n) => {
-                    println!("InXWeeks: {}", n);
-                    let mut difference = 7 * (n as i32);
+                DateExpression::InXWeeks(weeks) => {
+                    debug!("InXWeeks; Weeks {}", weeks);
+
+                    let mut difference = 7 * (weeks as i32);
 
                     difference -= match start_day_week {
                         StartDayOfWeek::Sunday => now.weekday().num_days_from_sunday() as i32,
                         StartDayOfWeek::Monday => now.weekday().num_days_from_monday() as i32,
                     };
 
-                    println!("Difference: {}", difference);
-
                     let dur = Duration::days(difference as i64);
                     return Some(now.checked_add_signed(dur).unwrap());
                 }
 
-                DateExpression::DayInXWeeks(n, d) => {
-                    println!("DayInXWeeks: in weeks: {} weekday: {:?} ", n, d);
+                DateExpression::DayInXWeeks(weeks, weekday) => {
+                    debug!("DayInXWeeks; Weeks: {}; Weekday: {:?}", weeks, weekday);
 
-                    let mut difference = 7 * (n as i32);
-
-                    println!("Diff {}", difference);
+                    let mut difference = 7 * (weeks as i32);
 
                     difference += match start_day_week {
                         StartDayOfWeek::Sunday => {
-                            (d.num_days_from_sunday() as i32)
+                            (weekday.num_days_from_sunday() as i32)
                                 - (now.weekday().num_days_from_sunday() as i32)
                         }
                         StartDayOfWeek::Monday => {
-                            (d.num_days_from_monday() as i32)
+                            (weekday.num_days_from_monday() as i32)
                                 - (now.weekday().num_days_from_monday() as i32)
                         }
                     };
 
-                    println!(
-                        "Diff {}; {} - {}",
-                        difference,
-                        d.num_days_from_monday(),
-                        (now.weekday().num_days_from_monday())
-                    );
-
                     let dur = Duration::days(difference as i64);
                     return Some(now.checked_add_signed(dur).unwrap());
                 }
 
-                DateExpression::InXMonths(n) => {
-                    println!("InXMonths: {} ", n);
+                DateExpression::InXMonths(months) => {
+                    debug!("InXMonths; Months {} ", months);
 
                     let now_month = now.month();
-                    let to_month = (now_month as i32) + n;
+                    let to_month = (now_month as i32) + months;
                     return NaiveDate::from_ymd_opt(now.year(), to_month as u32, now.day());
                 }
 
                 DateExpression::InMonthInYear(month, year) => {
-                    println!("DayInXWeeks: month: {:?} year: {} ", month, year);
+                    debug!("DayInXWeeks; Months: {:?}; Year: {} ", month, year);
                     return NaiveDate::from_ymd_opt(year, month as u32, 1);
                 }
             }

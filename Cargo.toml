@@ -1,6 +1,6 @@
 [package]
 name = "date_time_parser_multi_language"
-version = "0.2.0"
+version = "0.4.0"
 edition = "2021"
 license = "MIT"
 description = "date_time_parser_multi_language is a package designed to extract and interpret date information from strings across multiple languages."
@@ -19,4 +19,5 @@ include = ["src", "Cargo.lock", "Cargo.toml", "CHANGELOG.md", "LICENSE", "README
 
 [dependencies]
 chrono = "0.4.40"
+log = "0.4.27"
 regex = "1.11.1"
