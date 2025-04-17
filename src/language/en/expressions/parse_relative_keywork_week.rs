@@ -1,6 +1,6 @@
 use regex::Regex;
 
-use crate::language::shared::{DateExpression, DateFormat};
+use crate::{language::shared::DateExpression, DateFormat};
 
 /// Parses a `str` into an `Option` containing a `DateExpression::InXWeeks(i8)`
 pub fn parse_keyword_relative_week(

@@ -31,7 +31,7 @@ Modifications:
 Modified by Outlawraspberry UG (haftungsbeschränkt)
 */
 
-use crate::language::shared::DateFormat;
+use crate::language::date_format::DateFormat;
 
 /// An interface for dealing with parsing unstructured text. Implement this trait for your abstract syntax when parsing.
 pub trait Recognizable: Sized {

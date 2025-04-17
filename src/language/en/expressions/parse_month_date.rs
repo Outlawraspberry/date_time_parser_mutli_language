@@ -36,8 +36,9 @@ Modifications by Outlawraspberry UG (haftungsbeschränkt)
 
 use regex::Regex;
 
-use crate::language::shared::{DateExpression, DateFormat, Month};
+use crate::language::shared::{DateExpression, Month};
 use crate::recognizable::Recognizable;
+use crate::DateFormat;
 
 /// Parses a `str` into an `Option` containing a `DateExpr::InMonth(MonthOfYear, u32)`.
 pub fn parse_month_date(text: &str, date_format: &DateFormat) -> Option<DateExpression> {
