@@ -37,10 +37,7 @@ Modifications by Outlawraspberry UG (haftungsbeschränkt)
 use chrono::Weekday;
 use regex::Regex;
 
-use crate::{
-    language::shared::{DateExpression, DateFormat},
-    recognizable::Recognizable,
-};
+use crate::{language::shared::DateExpression, recognizable::Recognizable, DateFormat};
 
 /// Parses a `str` into an `Option` containing a `DateExpression::InWeek(i8, Weekday)`
 pub fn parse_date_in_week(text: &str, date_format: &DateFormat) -> Option<DateExpression> {

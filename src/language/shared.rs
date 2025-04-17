@@ -2,16 +2,7 @@ use chrono::Weekday;
 
 use crate::recognizable::Recognizable;
 
-pub enum DateFormat {
-    DayMonthYear,
-    MonthDayYear,
-    // todo is YearMonthDay a case?
-}
-
-pub enum StartDayOfWeek {
-    Sunday,
-    Monday,
-}
+use super::date_format::DateFormat;
 
 #[derive(PartialEq, Debug, Clone)]
 pub enum Month {

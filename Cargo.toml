@@ -1,6 +1,6 @@
 [package]
 name = "date_time_parser_multi_language"
-version = "0.4.0"
+version = "0.5.0"
 edition = "2021"
 license = "MIT"
 description = "date_time_parser_multi_language is a package designed to extract and interpret date information from strings across multiple languages."
